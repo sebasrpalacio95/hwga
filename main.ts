@@ -3,7 +3,7 @@
  * and SHT2x sensors
 */
 
-let sht_i2c_address = 0x40;
+let sht_i2c_address = 0x44;
 
 //% color=#4c6ef5 weight=25 icon="\uf043" block="SHT2x Sensor"
 namespace SHT2xDriver {
@@ -17,7 +17,7 @@ namespace SHT2xDriver {
     export function read_humidity(): number {
         pins.i2cWriteNumber(sht_i2c_address, 0x2C, NumberFormat.UInt8LE, false);
         basic.pause(100);
-        let buff = pins.i2cReadBuffer(sht_i2c_address, 3);
+        let buff = pins.i2cReadBuffer(sht_i2c_address, 6);
         let result = buff[0] << 8;
         result |= buff[1];
         result = (((625 * result) >> 12)) / 100;
@@ -34,8 +34,8 @@ namespace SHT2xDriver {
         pins.i2cWriteNumber(sht_i2c_address, 0x2C, NumberFormat.UInt8LE, false);
         basic.pause(100);
         let buff = pins.i2cReadBuffer(sht_i2c_address, 3);
-        let result = buff[0] << 8;
-        result |= buff[1];
+        let result = buff[3] << 8;
+        result |= buff[4];
         result = (((4375 * result) >> 14) - 4500) / 100;
         return result;
     }
